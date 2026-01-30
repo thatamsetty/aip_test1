@@ -10,10 +10,6 @@ from typing import Optional
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
-if not BREVO_API_KEY or not SENDER_EMAIL:
-    raise Exception("❌ BREVO_API_KEY or SENDER_EMAIL not set in environment variables!")
-
-BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 # =========================
 # OTP GENERATOR
