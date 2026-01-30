@@ -7,3 +7,4 @@ pyyaml
 natsort
 requests
 PyJWT
+python-multipart
