@@ -21,9 +21,24 @@ ALGORITHM = "HS256"
 # =========================
 
 USERS_DB = {
-    "super_root": {"password": "super123", "role": "superadmin"},
-    "admin": {"password": "admin123", "role": "admin"},
-    **{f"user_{i:02d}": {"password": "user123", "role": "user"} for i in range(1, 11)}
+    "super_root": {
+        "password": "super123",
+        "role": "superadmin",
+        "email": "super@example.com"
+    },
+    "admin": {
+        "password": "admin123",
+        "role": "admin",
+        "email": "admin@example.com"
+    },
+    **{
+        f"user_{i:02d}": {
+            "password": "user123",
+            "role": "user",
+            "email": f"user{i:02d}@example.com"
+        }
+        for i in range(1, 11)
+    }
 }
 
 # =========================
@@ -47,9 +62,8 @@ def login(data: LoginRequest):
     otp = generate_otp()
     save_otp(data.username, otp)
 
-    # ✅ FIXED: correct function call
     send_otp_email(
-        to_email=data.username,  # must be email in real app
+        to_email=user["email"],
         otp=otp
     )
 
@@ -68,7 +82,6 @@ def verify(data: OTPVerifyRequest):
 
     return {"status": "success", "message": message}
 
-
 # =========================
 # ISSUE TOKEN
 # =========================
@@ -84,6 +97,11 @@ def get_success(username: str):
         )
 
     user = USERS_DB.get(username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
 
     payload = {
         "sub": username,
@@ -93,7 +111,6 @@ def get_success(username: str):
 
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-    # cleanup OTP after success
     OTP_STORE.pop(username, None)
 
     return {

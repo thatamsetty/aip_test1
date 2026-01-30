@@ -41,7 +41,7 @@ def save_otp(email: str, otp: str, ttl_minutes: int = 5):
     }
 
 # =========================
-# VERIFY OTP (🔥 FIXED)
+# VERIFY OTP ✅ FINAL
 # =========================
 
 def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
@@ -51,12 +51,12 @@ def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
         return False, "OTP not found"
 
     if datetime.utcnow() > record["expires_at"]:
+        OTP_STORE.pop(email, None)
         return False, "OTP expired"
 
     if record["otp"] != otp:
         return False, "Invalid OTP"
 
-    # ✅ MARK VERIFIED
     record["verified"] = True
     return True, "OTP verified successfully"
 
@@ -64,7 +64,7 @@ def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
 # EMAIL SENDER
 # =========================
 
-def _send_email(to_email: str, subject: str, body: str):
+def _send_email(subject: str, body: str):
     if not BREVO_API_KEY or not SENDER_EMAIL:
         print("⚠️ Email skipped: Brevo not configured")
         return
@@ -88,15 +88,10 @@ def _send_email(to_email: str, subject: str, body: str):
     requests.post(BREVO_URL, json=payload, headers=headers, timeout=30)
 
 # =========================
-# SEND OTP
+# SEND OTP ✅ DO NOT SAVE AGAIN
 # =========================
 
-def send_otp_email(to_email: str, otp: Optional[str] = None) -> str:
-    if not otp:
-        otp = generate_otp()
-
-    save_otp(to_email, otp)
-
+def send_otp_email(to_email: str, otp: str):
     subject = "Your OTP Code"
     body = f"""
 Hello,
@@ -106,5 +101,4 @@ Your OTP code is: {otp}
 Valid for 5 minutes.
 """
 
-    _send_email(to_email, subject, body)
-    return otp
+    _send_email(subject, body)

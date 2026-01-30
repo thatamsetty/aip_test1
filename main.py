@@ -12,7 +12,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException
 
 from auth.auth_routes import router as auth_router
-from auth.otp_service import send_download_link_email, send_rejection_email
 
 
 
