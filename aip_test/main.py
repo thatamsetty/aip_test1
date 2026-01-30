@@ -14,6 +14,11 @@ from auth.auth_routes import router as auth_router
 from auth.otp_service import send_download_link_email, send_rejection_email
 from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+
 ##app_init
 app = FastAPI(title="AIP-API's")
 app.include_router(auth_router)
@@ -33,9 +38,9 @@ ACTIVE_PROJECT_ID = None  # Tracks current project for get-result and get-analyt
 
 ##project_mapping
 PROJECT_PATH_MAP = {
-    "001": r"C:\Users\akula\Downloads\aip_test\Datasets\counting of animals.v1i.yolov12\train",
-    "002": r"C:\Users\akula\Downloads\aip_test\Datasets\Mining Vehicles.v1i.yolov12\train",
-    "003": r"C:\Users\akula\Downloads\aip_test\Datasets\Vehicle Detection.v1i.yolov12\train"
+    "001": os.path.join(BASE_DIR, "Datasets", "counting of animals.v1i.yolov12", "train"),
+    "002": os.path.join(BASE_DIR, "Datasets", "Mining Vehicles.v1i.yolov12", "train"),
+    "003": os.path.join(BASE_DIR, "Datasets", "Vehicle Detection.v1i.yolov12", "train"),
 }
 
 ##storage_paths
@@ -56,9 +61,9 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ##cloudinary_auth
 cloudinary.config(
-    cloud_name = "dateiqugp",           
-    api_key = "769797368196371",       
-    api_secret = "bZoEbK0j5lVp2aEggbs7IhPun0g"
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
 )
 
 ##schemas

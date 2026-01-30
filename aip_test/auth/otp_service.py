@@ -1,102 +1,121 @@
+import os
 import random
-import smtplib
-from datetime import datetime, timedelta
-from email.message import EmailMessage
+import requests
+from typing import Optional
 
-# --- Configuration ---
-class MailConfig:
-    SENDER_EMAIL = "keerthanaakula04@gmail.com"
-    SENDER_PASSWORD = "gtjwqrxwvupjeqzy"
-    OTP_RECIPIENT = "likithaadabala5@gmail.com"
-    DOWNLOAD_RECEIVER_EMAIL = "keerthanaakula04@gmail.com"
-    SMTP_SERVER = "smtp.gmail.com"
-    SMTP_PORT = 465
+# =========================
+# CONFIG
+# =========================
 
-OTP_STORE = {}
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
-# --- OTP Logic ---
-def generate_otp() -> int:
-    return random.randint(100000, 999999)
+if not BREVO_API_KEY or not SENDER_EMAIL:
+    raise Exception("❌ BREVO_API_KEY or SENDER_EMAIL not set in environment variables!")
 
-def save_otp(username: str, otp: int):
-    """Initializes verification as False for the 2nd POST step."""
-    OTP_STORE[username] = {
-        "otp": otp,
-        "expires_at": datetime.now() + timedelta(minutes=2),
-        "verified": False  
+BREVO_URL = "https://api.brevo.com/v3/smtp/email"
+
+# =========================
+# OTP GENERATOR
+# =========================
+
+def generate_otp() -> str:
+    return str(random.randint(100000, 999999))
+
+# =========================
+# CORE SEND EMAIL (BREVO API)
+# =========================
+
+def _send_email(to_email: str, subject: str, body: str):
+    headers = {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json",
     }
 
-def verify_otp(username: str, otp: int):
-    """Marks session as verified to allow token generation."""
-    record = OTP_STORE.get(username)
-    if not record:
-        return False, "No OTP found for this user."
-    if datetime.now() > record["expires_at"]:
-        return False, "OTP has expired. Please request a new one."
-    if record["otp"] != otp:
-        return False, "The OTP entered is incorrect."
-    
-    record["verified"] = True
-    return True, "OTP verified successfully."
+    payload = {
+        "sender": {
+            "email": SENDER_EMAIL,
+            "name": "Akin Analytics"
+        },
+        "to": [
+            {"email": likithaadabala5@gmail.com}
+        ],
+        "subject": subject,
+        "textContent": body,
+    }
 
-# --- Email Services ---
-def _send_email(subject: str, content: str, to_email: str):
-    """Internal helper to send emails via SMTP_SSL."""
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = MailConfig.SENDER_EMAIL
-    msg["To"] = to_email
-    msg.set_content(content)
+    response = requests.post(
+        BREVO_URL,
+        json=payload,
+        headers=headers,
+        timeout=30
+    )
 
-    with smtplib.SMTP_SSL(MailConfig.SMTP_SERVER, MailConfig.SMTP_PORT) as server:
-        server.login(MailConfig.SENDER_EMAIL, MailConfig.SENDER_PASSWORD)
-        server.send_message(msg)
+    if response.status_code not in (200, 201, 202):
+        raise Exception(
+            f"❌ Brevo API Error: {response.status_code} {response.text}"
+        )
 
-def send_otp_email(otp: int, role: str):
-    """Sends OTP verification email using Akin Analytics branding."""
-    subject = f"Security Verification: {role.upper()} Access"
-    message = f"""Hello,
+# =========================
+# SEND OTP EMAIL
+# =========================
 
-You are attempting to log in as a {role.upper()}.
+def send_otp_email(to_email: str, otp: Optional[str] = None) -> str:
+    if not otp:
+        otp = generate_otp()
 
-Your verification code is: {otp}
+    subject = "Your OTP Code"
+    body = f"""
+Hello,
 
-This OTP is valid for 2 minutes. If you did not request this, please ignore this email.
+Your OTP code is: {otp}
 
-Regards,
-Akin Analytics-Tech Team"""
-    _send_email(subject, message, MailConfig.OTP_RECIPIENT)
+This OTP is valid for 5 minutes.
 
-def send_download_link_email(download_link: str):
-    """Sends download link with exact format from the provided image."""
-    subject = "Your File is Ready for Download"
-    # Matches the exact text and spacing from image_ddec74.png
-    message = f"""Hello,
+If you did not request this, please ignore this email.
+"""
 
-Your file has been uploaded successfully.
+    _send_email(to_email, subject, body)
+    return otp
 
-You can download it using the link below:
+# =========================
+# SEND DOWNLOAD LINK EMAIL
+# =========================
+
+def send_download_link_email(to_email: str, download_link: str) -> bool:
+    subject = "Your Download Link Is Ready"
+    body = f"""
+Hello,
+
+Your file is ready for download.
+
+Click here to download:
 {download_link}
 
-Please download your dataset using the above link & start annotation process.
+Thank you.
+"""
+    _send_email(to_email, subject, body)
+    return True
 
-Regards,
-Akin Analytics-Tech Team"""
-    _send_email(subject, message, MailConfig.DOWNLOAD_RECEIVER_EMAIL)
+# =========================
+# SEND REJECTION EMAIL
+# =========================
 
-def send_rejection_email(image_id: str, image_url: str):
-    """Sends rejection notification using Akin Analytics branding."""
-    subject = f" Action Required: Image Rejection (ID: {image_id})"
-    message = f"""Hello,
+def send_rejection_email(
+    to_email: str,
+    reason: str = "Your request was rejected"
+) -> bool:
+    subject = "Request Rejected"
+    body = f"""
+Hello,
 
-An image has been rejected during the review process.
+We regret to inform you that your request was rejected.
 
-Details:
-- Image ID: {image_id}
-- Image URL: {image_url}
+Reason:
+{reason}
 
-Please review the image and do annotations again.
-
-Regards,
-Akin Analytics-Tech Team"""
-    _send_email(subject, message, MailConfig.DOWNLOAD_RECEIVER_EMAIL)
+Please contact support if you think this is a mistake.
+"""
+    _send_email(to_email, subject, body)
+    return True
