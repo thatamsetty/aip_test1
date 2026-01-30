@@ -43,7 +43,7 @@ def save_otp(username: str, otp: str, ttl_minutes: int = 5):
 # VERIFY OTP
 # =========================
 
-def verify_otp(username: str, otp: str) -> Tuple[bool, str]:
+def verify_otp(username: str, otp) -> Tuple[bool, str]:
     record = OTP_STORE.get(username)
 
     if not record:
@@ -53,11 +53,13 @@ def verify_otp(username: str, otp: str) -> Tuple[bool, str]:
         OTP_STORE.pop(username, None)
         return False, "OTP expired"
 
-    if record["otp"] != otp:
+    # ✅ FORCE BOTH TO STRING
+    if record["otp"] != str(otp):
         return False, "Invalid OTP"
 
     record["verified"] = True
     return True, "OTP verified successfully"
+
 
 # =========================
 # EMAIL SENDER
