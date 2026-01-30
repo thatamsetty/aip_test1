@@ -16,28 +16,17 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 SECRET_KEY = "akin-777"
 ALGORITHM = "HS256"
 
+ALLOWED_OTP_EMAIL = "thrinethra098@gmail.com"
+
 # =========================
-# USER STORE (IN-MEMORY)
+# USER STORE
 # =========================
 
 USERS_DB = {
-    "super_root": {
-        "password": "super123",
-        "role": "superadmin",
-        "email": "super@example.com"
-    },
     "admin": {
         "password": "admin123",
         "role": "admin",
-        "email": "admin@example.com"
-    },
-    **{
-        f"user_{i:02d}": {
-            "password": "user123",
-            "role": "user",
-            "email": f"user{i:02d}@example.com"
-        }
-        for i in range(1, 11)
+        "email": "thrinethra098@gmail.com"
     }
 }
 
@@ -56,14 +45,23 @@ def login(data: LoginRequest):
     ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username, password, or role"
+            detail="Invalid credentials"
+        )
+
+    if user["email"] != ALLOWED_OTP_EMAIL:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="OTP not allowed for this email"
         )
 
     otp = generate_otp()
+
+    # ✅ STORE OTP USING USERNAME
     save_otp(data.username, otp)
 
+    # ✅ SEND OTP ONLY TO FIXED EMAIL
     send_otp_email(
-        to_email=user["email"],
+        to_email=ALLOWED_OTP_EMAIL,
         otp=otp
     )
 
@@ -90,18 +88,13 @@ def verify(data: OTPVerifyRequest):
 def get_success(username: str):
     record = OTP_STORE.get(username)
 
-    if not record or not record.get("verified"):
+    if not record or not record["verified"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="OTP verification required"
         )
 
     user = USERS_DB.get(username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
 
     payload = {
         "sub": username,
@@ -111,6 +104,7 @@ def get_success(username: str):
 
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
+    # cleanup
     OTP_STORE.pop(username, None)
 
     return {

@@ -1,8 +1,8 @@
 import os
 import random
 import requests
-from typing import Optional, Tuple
 from datetime import datetime, timedelta
+from typing import Tuple, Optional
 
 # =========================
 # CONFIG
@@ -13,11 +13,10 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
-if not BREVO_API_KEY or not SENDER_EMAIL:
-    print("⚠️ Email skipped: Brevo not configured")
+ALLOWED_OTP_EMAIL = "thrinethra098@gmail.com"
 
 # =========================
-# OTP STORE
+# OTP STORE (KEY = username)
 # =========================
 
 OTP_STORE = {}
@@ -33,25 +32,25 @@ def generate_otp() -> str:
 # SAVE OTP
 # =========================
 
-def save_otp(email: str, otp: str, ttl_minutes: int = 5):
-    OTP_STORE[email] = {
+def save_otp(username: str, otp: str, ttl_minutes: int = 5):
+    OTP_STORE[username] = {
         "otp": otp,
         "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes),
         "verified": False
     }
 
 # =========================
-# VERIFY OTP ✅ FINAL
+# VERIFY OTP
 # =========================
 
-def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
-    record = OTP_STORE.get(email)
+def verify_otp(username: str, otp: str) -> Tuple[bool, str]:
+    record = OTP_STORE.get(username)
 
     if not record:
         return False, "OTP not found"
 
     if datetime.utcnow() > record["expires_at"]:
-        OTP_STORE.pop(email, None)
+        OTP_STORE.pop(username, None)
         return False, "OTP expired"
 
     if record["otp"] != otp:
@@ -64,7 +63,7 @@ def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
 # EMAIL SENDER
 # =========================
 
-def _send_email(subject: str, body: str):
+def _send_email(to_email: str, subject: str, body: str):
     if not BREVO_API_KEY or not SENDER_EMAIL:
         print("⚠️ Email skipped: Brevo not configured")
         return
@@ -76,29 +75,32 @@ def _send_email(subject: str, body: str):
     }
 
     payload = {
-        "sender": {
-            "email": SENDER_EMAIL,
-            "name": "Akin Analytics"
-        },
-        "to": [{"email": "thrinethra098@gmail.com"}],
+        "sender": {"email": SENDER_EMAIL, "name": "Akin Analytics"},
+        "to": [{"email": to_email}],
         "subject": subject,
         "textContent": body,
     }
 
-    requests.post(BREVO_URL, json=payload, headers=headers, timeout=30)
+    response = requests.post(BREVO_URL, json=payload, headers=headers, timeout=30)
+
+    if response.status_code not in (200, 201, 202):
+        raise Exception(f"Brevo error: {response.text}")
 
 # =========================
-# SEND OTP ✅ DO NOT SAVE AGAIN
+# SEND OTP EMAIL
 # =========================
 
-def send_otp_email(to_email: str, otp: str):
+def send_otp_email(to_email: str, otp: Optional[str] = None):
+    if to_email != ALLOWED_OTP_EMAIL:
+        raise Exception("OTP email not authorized")
+
     subject = "Your OTP Code"
     body = f"""
 Hello,
 
 Your OTP code is: {otp}
 
-Valid for 5 minutes.
+This OTP is valid for 5 minutes.
 """
 
-    _send_email(subject, body)
+    _send_email(to_email, subject, body)
