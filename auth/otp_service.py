@@ -13,7 +13,7 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
-ALLOWED_OTP_EMAIL = "thrinethra098@gmail.com"
+ALLOWED_OTP_EMAIL = "likithaadabala5@gmail.com"
 
 # =========================
 # OTP STORE (KEY = username)
