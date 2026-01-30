@@ -5,7 +5,7 @@ from typing import Optional
 from datetime import datetime, timedelta
 
 # =========================
-# CONFIG (SAFE)
+# CONFIG
 # =========================
 
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
@@ -20,7 +20,7 @@ if not BREVO_API_KEY or not SENDER_EMAIL:
 # IN-MEMORY OTP STORE
 # =========================
 
-_OTP_STORE = {}
+OTP_STORE = {}
 
 # =========================
 # OTP GENERATOR
@@ -34,13 +34,13 @@ def generate_otp() -> str:
 # =========================
 
 def save_otp(email: str, otp: str, ttl_minutes: int = 5):
-    _OTP_STORE[email] = {
+    OTP_STORE[email] = {
         "otp": otp,
         "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes)
     }
 
 def verify_otp(email: str, otp: str) -> bool:
-    data = _OTP_STORE.get(email)
+    data = OTP_STORE.get(email)
     if not data:
         return False
 
@@ -55,7 +55,8 @@ def verify_otp(email: str, otp: str) -> bool:
 
 def _send_email(to_email: str, subject: str, body: str):
     if not BREVO_API_KEY or not SENDER_EMAIL:
-        raise Exception("Brevo email is not configured")
+        print("⚠️ Email skipped: Brevo not configured")
+        return
 
     headers = {
         "accept": "application/json",
@@ -69,7 +70,7 @@ def _send_email(to_email: str, subject: str, body: str):
             "name": "Akin Analytics"
         },
         "to": [
-            {"email": thrinethra098@gmail.com}
+            {"email": "thrinethra098@gmail.com"}
         ],
         "subject": subject,
         "textContent": body,
