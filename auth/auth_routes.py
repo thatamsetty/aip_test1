@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException, status
 from datetime import datetime, timedelta
 import jwt
 
-# Internal imports
 from .auth_models import LoginRequest, OTPVerifyRequest
 from .otp_service import (
     generate_otp,
@@ -48,11 +47,10 @@ def login(data: LoginRequest):
     otp = generate_otp()
     save_otp(data.username, otp)
 
-    # ✅ FIXED: pass to_email correctly
+    # ✅ FIXED: correct function call
     send_otp_email(
-        to_email=data.username,
-        otp=otp,
-        role=user["role"]
+        to_email=data.username,  # must be email in real app
+        otp=otp
     )
 
     return {"message": "OTP sent successfully"}
@@ -63,20 +61,17 @@ def login(data: LoginRequest):
 
 @router.post("/verify-otp")
 def verify(data: OTPVerifyRequest):
-    is_valid = verify_otp(data.username, data.otp)
+    success, message = verify_otp(data.username, data.otp)
 
-    if not is_valid:
+    if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid or expired OTP"
+            detail=message
         )
-
-    # ✅ mark OTP as verified
-    OTP_STORE[data.username]["verified"] = True
 
     return {
         "status": "success",
-        "message": "OTP verified successfully"
+        "message": message
     }
 
 # =========================
@@ -103,7 +98,7 @@ def get_success(username: str):
 
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-    # cleanup OTP
+    # cleanup OTP after success
     OTP_STORE.pop(username, None)
 
     return {

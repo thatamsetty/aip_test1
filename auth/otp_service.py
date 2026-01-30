@@ -36,18 +36,27 @@ def generate_otp() -> str:
 def save_otp(email: str, otp: str, ttl_minutes: int = 5):
     OTP_STORE[email] = {
         "otp": otp,
-        "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes)
+        "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes),
+        "verified": False
     }
 
-def verify_otp(email: str, otp: str) -> bool:
+def verify_otp(email: str, otp: str):
     data = OTP_STORE.get(email)
+
     if not data:
-        return False
+        return False, "OTP not found"
 
     if datetime.utcnow() > data["expires_at"]:
-        return False
+        return False, "OTP expired"
 
-    return data["otp"] == otp
+    if data["otp"] != otp:
+        return False, "Invalid OTP"
+
+    # ✅ mark as verified
+    data["verified"] = True
+
+    return True, "OTP verified successfully"
+
 
 # =========================
 # CORE EMAIL SENDER
