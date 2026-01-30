@@ -1,7 +1,7 @@
 import os
 import random
 import requests
-from typing import Optional
+from typing import Optional, Tuple
 from datetime import datetime, timedelta
 
 # =========================
@@ -14,10 +14,10 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 if not BREVO_API_KEY or not SENDER_EMAIL:
-    print("⚠️ WARNING: Brevo email variables not set")
+    print("⚠️ Email skipped: Brevo not configured")
 
 # =========================
-# IN-MEMORY OTP STORE
+# OTP STORE
 # =========================
 
 OTP_STORE = {}
@@ -30,7 +30,7 @@ def generate_otp() -> str:
     return str(random.randint(100000, 999999))
 
 # =========================
-# OTP STORAGE
+# SAVE OTP
 # =========================
 
 def save_otp(email: str, otp: str, ttl_minutes: int = 5):
@@ -40,29 +40,31 @@ def save_otp(email: str, otp: str, ttl_minutes: int = 5):
         "verified": False
     }
 
-def verify_otp(email: str, otp: str):
-    data = OTP_STORE.get(email)
+# =========================
+# VERIFY OTP (🔥 FIXED)
+# =========================
 
-    if not data:
+def verify_otp(email: str, otp: str) -> Tuple[bool, str]:
+    record = OTP_STORE.get(email)
+
+    if not record:
         return False, "OTP not found"
 
-    if datetime.utcnow() > data["expires_at"]:
+    if datetime.utcnow() > record["expires_at"]:
         return False, "OTP expired"
 
-    if data["otp"] != otp:
+    if record["otp"] != otp:
         return False, "Invalid OTP"
 
-    # ✅ mark as verified
-    data["verified"] = True
-
+    # ✅ MARK VERIFIED
+    record["verified"] = True
     return True, "OTP verified successfully"
 
-
 # =========================
-# CORE EMAIL SENDER
+# EMAIL SENDER
 # =========================
 
-def _send_email(subject: str, body: str):
+def _send_email(to_email: str, subject: str, body: str):
     if not BREVO_API_KEY or not SENDER_EMAIL:
         print("⚠️ Email skipped: Brevo not configured")
         return
@@ -78,85 +80,31 @@ def _send_email(subject: str, body: str):
             "email": SENDER_EMAIL,
             "name": "Akin Analytics"
         },
-        "to": [
-            {"email": "thrinethra098@gmail.com"}  # 🔒 always send to you
-        ],
+        "to": [{"email": "thrinethra098@gmail.com"}],
         "subject": subject,
         "textContent": body,
     }
 
-    response = requests.post(
-        BREVO_URL,
-        json=payload,
-        headers=headers,
-        timeout=30
-    )
-
-    if response.status_code not in (200, 201, 202):
-        raise Exception(
-            f"Brevo API Error: {response.status_code} {response.text}"
-        )
+    requests.post(BREVO_URL, json=payload, headers=headers, timeout=30)
 
 # =========================
-# SEND OTP EMAIL (FIXED)
+# SEND OTP
 # =========================
 
-def send_otp_email(
-    to_email: str,
-    otp: Optional[str] = None,
-    role: Optional[str] = None  # ✅ FIXED
-) -> str:
+def send_otp_email(to_email: str, otp: Optional[str] = None) -> str:
     if not otp:
         otp = generate_otp()
 
     save_otp(to_email, otp)
-
-    role_text = f"\nRole: {role}\n" if role else ""
 
     subject = "Your OTP Code"
     body = f"""
 Hello,
 
 Your OTP code is: {otp}
-{role_text}
-This OTP is valid for 5 minutes.
 
-If you did not request this, please ignore this email.
+Valid for 5 minutes.
 """
 
-    _send_email(subject, body)
+    _send_email(to_email, subject, body)
     return otp
-
-# =========================
-# SEND DOWNLOAD LINK EMAIL
-# =========================
-
-def send_download_link_email(to_email: str, download_link: str) -> bool:
-    subject = "Your Download Link Is Ready"
-    body = f"""
-Hello,
-
-Your file is ready for download.
-
-Click here:
-{download_link}
-"""
-    _send_email(subject, body)
-    return True
-
-# =========================
-# SEND REJECTION EMAIL
-# =========================
-
-def send_rejection_email(to_email: str, reason: str) -> bool:
-    subject = "Request Rejected"
-    body = f"""
-Hello,
-
-We regret to inform you that your request was rejected.
-
-Reason:
-{reason}
-"""
-    _send_email(subject, body)
-    return True

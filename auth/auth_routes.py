@@ -64,15 +64,10 @@ def verify(data: OTPVerifyRequest):
     success, message = verify_otp(data.username, data.otp)
 
     if not success:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=message
-        )
+        raise HTTPException(status_code=400, detail=message)
 
-    return {
-        "status": "success",
-        "message": message
-    }
+    return {"status": "success", "message": message}
+
 
 # =========================
 # ISSUE TOKEN
