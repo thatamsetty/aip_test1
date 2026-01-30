@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ALT-001",
+    "type": "Critical",
+    "title": "Infrastructure Anomaly Detected",
+    "description": "Unusual stress patterns detected on Bridge Section A-23",
+    "dateTime": "2024-10-05 14:32",
+    "status": "active",
+    "priority": "high",
+    "source": "Road Inspection",
+    "recipient": "Infrastructure Team",
+    "severity": "critical"
+  },
+  {
+    "id": "ALT-002",
+    "type": "Warning",
+    "title": "High Traffic Congestion",
+    "description": "Traffic volume exceeding normal capacity in Central District",
+    "dateTime": "2024-10-05 13:15",
+    "status": "acknowledged",
+    "priority": "medium",
+    "source": "Smart City Analytics",
+    "recipient": "Traffic Management",
+    "severity": "warning"
+  },
+  {
+    "id": "ALT-003",
+    "type": "Information",
+    "title": "Scheduled Maintenance Complete",
+    "description": "Solar panel cleaning completed successfully at Site B",
+    "dateTime": "2024-10-05 11:00",
+    "status": "resolved",
+    "priority": "low",
+    "source": "Energy & Utilities",
+    "recipient": "Maintenance Team",
+    "severity": "info"
+  },
+  {
+    "id": "ALT-004",
+    "type": "Critical",
+    "title": "Equipment Malfunction",
+    "description": "Drone communication lost during mosquito control operation",
+    "dateTime": "2024-10-05 09:45",
+    "status": "active",
+    "priority": "high",
+    "source": "Environmental Monitoring",
+    "recipient": "Field Operations",
+    "severity": "critical"
+  },
+  {
+    "id": "ALT-005",
+    "type": "Warning",
+    "title": "Weather Alert",
+    "description": "High wind conditions may affect outdoor operations",
+    "dateTime": "2024-10-05 08:30",
+    "status": "acknowledged",
+    "priority": "medium",
+    "source": "Weather Service",
+    "recipient": "All Teams",
+    "severity": "warning"
+  }
+]

@@ -1,0 +1,36 @@
+[{
+  "id": "001",
+  "name": "Counting of Animals",
+  "industryType": "Forest and Environment",
+  "deliverables": "Animal Counting + Detection",
+  "location": "Uttarakhand",
+  "status": "Completed",
+  "progress": 100,
+  "startDate": "2026-01-22",
+  "team": 5,
+  "priority": "high"
+},
+{
+  "id": "002",
+  "name": "Mining Vehicles",
+  "industryType": "Mining and Cementery",
+  "deliverables": "Vehicle Detection + Counting",
+  "location": "Pune",
+  "status": "Completed",
+  "progress": 100,
+  "startDate": "2026-01-22",
+  "team": 5,
+  "priority": "high"
+},
+{
+  "id": "003",
+  "name": "Vehicle Detection",
+  "industryType": "Smart City Living",
+  "deliverables": "Vehicle Detection + Analytics",
+  "location": "Bangalore",
+  "status": "Completed",
+  "progress": 100,
+  "startDate": "2026-01-22",
+  "team": 5,
+  "priority": "high"
+}]

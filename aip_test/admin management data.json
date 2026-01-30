@@ -1,0 +1,15 @@
+{
+  "admins": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@akin.com",
+      "role": "Senior Admin",
+      "users": 8,
+      "maxUsers": 10,
+      "status": "Active",
+      "lastLogin": "2 mins ago"
+    }
+
+  ]
+}

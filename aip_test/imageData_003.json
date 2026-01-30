@@ -1,0 +1,145 @@
+{
+  "project_id": "003",
+  "images": [
+    {
+      "id": 101,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682154/tgjrqkljzaerzc1tzlau.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "21"
+        },
+        {
+          "label": "Categories",
+          "value": "Truck, Van, Car"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682154/yetfarh6ajkbygxpuhwj.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "5"
+        },
+        {
+          "label": "Categories",
+          "value": "Car"
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682155/lu3voagzmilqevx4twyc.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "12"
+        },
+        {
+          "label": "Categories",
+          "value": "Proclainer, Truck, Van, Car"
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682156/rf8wbmpspgnoscszzktl.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "9"
+        },
+        {
+          "label": "Categories",
+          "value": "Truck, Van, Car"
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682157/efmlontg8m3mwbdwg6q3.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "7"
+        },
+        {
+          "label": "Categories",
+          "value": "Car"
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682158/plwhqwwsp4cqsxchovdq.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "12"
+        },
+        {
+          "label": "Categories",
+          "value": "Truck, Car"
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "mainImage": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682158/qvfkjfptsf5cg7ngbqil.jpg",
+      "cardTitle": "Detection: 003",
+      "meta": {
+        "date": "2026-01-29",
+        "location": "Analysis Lab"
+      },
+      "sectionTitle": "Object Statistics",
+      "metrics": [
+        {
+          "label": "Total Count",
+          "value": "27"
+        },
+        {
+          "label": "Categories",
+          "value": "Truck, Van, Car"
+        }
+      ]
+    }
+  ]
+}

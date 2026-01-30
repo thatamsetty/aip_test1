@@ -1,0 +1,84 @@
+{
+  "users": [
+    {
+      "user_id": "01",
+      "username": "user_01",
+      "email": "user_01@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-01"
+    },
+    {
+      "user_id": "02",
+      "username": "user_02",
+      "email": "user_02@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-02"
+    },
+    {
+      "user_id": "03",
+      "username": "user_03",
+      "email": "user_03@akin.com",
+      "plan": "Free",
+      "status": "Inactive",
+      "joined": "2024-01-03"
+    },
+    {
+      "user_id": "04",
+      "username": "user_04",
+      "email": "user_04@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-04"
+    },
+    {
+      "user_id": "05",
+      "username": "user_05",
+      "email": "user_05@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-05"
+    },
+    {
+      "user_id": "06",
+      "username": "user_06@akin.com",
+      "email": "user_06@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-06"
+    },
+    {
+      "user_id": "07",
+      "username": "user_07",
+      "email": "user_07@akin.com",
+      "plan": "Free",
+      "status": "Inactive",
+      "joined": "2024-01-07"
+    },
+    {
+      "user_id": "08",
+      "username": "user_08",
+      "email": "user_08@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-08"
+    },
+    {
+      "user_id": "09",
+      "username": "user_09",
+      "email": "user_09@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-09"
+    },
+    {
+      "user_id": "10",
+      "username": "user_10",
+      "email": "user_10@akin.com",
+      "plan": "Free",
+      "status": "Active",
+      "joined": "2024-01-10"
+    }
+  ]
+}

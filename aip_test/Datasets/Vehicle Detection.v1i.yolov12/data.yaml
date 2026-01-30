@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 4
+names: ['Car', 'Proclainer', 'Truck', 'Van']
+
+roboflow:
+  workspace: akin-kvs4o
+  project: vehicle-detection-lvpxa
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/akin-kvs4o/vehicle-detection-lvpxa/dataset/1

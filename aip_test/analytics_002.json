@@ -1,0 +1,111 @@
+{
+  "barData": [
+    {
+      "name": "Proclainer",
+      "Total": 4,
+      "Images": 3
+    },
+    {
+      "name": "Truck",
+      "Total": 5,
+      "Images": 3
+    }
+  ],
+  "pieData": [
+    {
+      "name": "Proclainer",
+      "value": 4,
+      "color": "#3b82f6"
+    },
+    {
+      "name": "Truck",
+      "value": 5,
+      "color": "#10b981"
+    }
+  ],
+  "areaData": [
+    {
+      "name": "Batch 1",
+      "Proclainer": 1
+    },
+    {
+      "name": "Batch 2",
+      "Proclainer": 3,
+      "Truck": 2
+    },
+    {
+      "name": "Batch 3",
+      "Proclainer": 4,
+      "Truck": 2
+    },
+    {
+      "name": "Batch 4",
+      "Proclainer": 4,
+      "Truck": 4
+    },
+    {
+      "name": "Batch 5",
+      "Proclainer": 4,
+      "Truck": 5
+    }
+  ],
+  "lineData": [
+    {
+      "name": "Observation 1",
+      "Detections": 1,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 2",
+      "Detections": 2,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 3",
+      "Detections": 1,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 4",
+      "Detections": 2,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 5",
+      "Detections": 1,
+      "Confidence": 95
+    }
+  ],
+  "gallery": [
+    {
+      "id": 101,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769681272/zyn7igrje0jmwvgxdxo6.jpg",
+      "species": "Proclainer",
+      "count": 1
+    },
+    {
+      "id": 102,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769681273/oj7uapwjuapsud0blbfp.jpg",
+      "species": "Proclainer, Truck",
+      "count": 2
+    },
+    {
+      "id": 103,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769681274/wk3refimdydkuowfsnmr.jpg",
+      "species": "Proclainer",
+      "count": 1
+    },
+    {
+      "id": 104,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769681275/bsxd4c6ostocmf9qvgip.jpg",
+      "species": "Truck",
+      "count": 2
+    },
+    {
+      "id": 105,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769681276/ccsm41d4wtozdifyhxfv.jpg",
+      "species": "Truck",
+      "count": 1
+    }
+  ]
+}

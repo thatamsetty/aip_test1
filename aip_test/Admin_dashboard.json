@@ -1,0 +1,54 @@
+{
+  "activeTasks": [
+    { "id": 1, "title": "Verify client documents", "status": "Active" },
+    { "id": 2, "title": "Industry approval review", "status": "Active" },
+    { "id": 3, "title": "Project milestone validation", "status": "Active" },
+    { "id": 4, "title": "Client onboarding", "status": "Active" },
+    { "id": 5, "title": "Audit report check", "status": "Active" },
+    { "id": 6, "title": "Compliance review", "status": "Active" },
+    { "id": 7, "title": "Data sync task", "status": "Active" },
+    { "id": 8, "title": "System monitoring", "status": "Active" },
+    { "id": 9, "title": "User access validation", "status": "Active" },
+    { "id": 10, "title": "Project status update", "status": "Active" },
+    { "id": 11, "title": "Client feedback review", "status": "Active" },
+    { "id": 12, "title": "Security scan", "status": "Active" },
+    { "id": 13, "title": "Invoice verification", "status": "Active" },
+    { "id": 14, "title": "Risk assessment", "status": "Active" },
+    { "id": 15, "title": "Database backup", "status": "Active" },
+    { "id": 16, "title": "API health check", "status": "Active" },
+    { "id": 17, "title": "Client status review", "status": "Active" },
+    { "id": 18, "title": "Industry report upload", "status": "Active" },
+    { "id": 19, "title": "Project review meeting", "status": "Active" },
+    { "id": 20, "title": "Access log audit", "status": "Active" },
+    { "id": 21, "title": "Server optimization", "status": "Active" },
+    { "id": 22, "title": "Client data validation", "status": "Active" },
+    { "id": 23, "title": "Workflow testing", "status": "Active" },
+    { "id": 24, "title": "Dashboard analytics check", "status": "Active" }
+  ],
+
+  "industries": [
+    { "id": 1, "name": "Manufacturing" },
+    { "id": 2, "name": "Information Technology" },
+    { "id": 3, "name": "Healthcare" },
+    { "id": 4, "name": "Construction" },
+    { "id": 5, "name": "Finance" }
+  ],
+
+  "clients": [
+    { "id": 1, "name": "ABC Industries", "industry": "Manufacturing" },
+    { "id": 2, "name": "TechNova Pvt Ltd", "industry": "Information Technology" },
+    { "id": 3, "name": "HealthPlus Hospitals", "industry": "Healthcare" },
+    { "id": 4, "name": "BuildRight Constructions", "industry": "Construction" },
+    { "id": 5, "name": "FinEdge Solutions", "industry": "Finance" },
+    { "id": 6, "name": "SmartTech Systems", "industry": "Information Technology" }
+  ],
+
+  "projects": [
+    { "id": 1, "name": "ERP Implementation", "clientId": 1, "status": "Completed" },
+    { "id": 2, "name": "Cloud Migration", "clientId": 2, "status": "Active" },
+    { "id": 3, "name": "Hospital Management System", "clientId": 3, "status": "Active" },
+    { "id": 4, "name": "Site Safety Automation", "clientId": 4, "status": "Completed" },
+    { "id": 5, "name": "Finance Analytics Dashboard", "clientId": 5, "status": "Active" },
+    { "id": 6, "name": "CRM Integration", "clientId": 6, "status": "Active" }
+  ]
+}

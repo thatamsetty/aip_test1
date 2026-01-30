@@ -1,0 +1,176 @@
+{
+  "barData": [
+    {
+      "name": "Truck",
+      "Total": 81,
+      "Images": 5
+    },
+    {
+      "name": "Van",
+      "Total": 69,
+      "Images": 4
+    },
+    {
+      "name": "Car",
+      "Total": 93,
+      "Images": 7
+    },
+    {
+      "name": "Proclainer",
+      "Total": 12,
+      "Images": 1
+    }
+  ],
+  "pieData": [
+    {
+      "name": "Truck",
+      "value": 81,
+      "color": "#3b82f6"
+    },
+    {
+      "name": "Van",
+      "value": 69,
+      "color": "#10b981"
+    },
+    {
+      "name": "Car",
+      "value": 93,
+      "color": "#f59e0b"
+    },
+    {
+      "name": "Proclainer",
+      "value": 12,
+      "color": "#ef4444"
+    }
+  ],
+  "areaData": [
+    {
+      "name": "Batch 1",
+      "Truck": 21,
+      "Van": 21,
+      "Car": 21
+    },
+    {
+      "name": "Batch 2",
+      "Truck": 21,
+      "Van": 21,
+      "Car": 26
+    },
+    {
+      "name": "Batch 3",
+      "Truck": 33,
+      "Van": 33,
+      "Car": 38,
+      "Proclainer": 12
+    },
+    {
+      "name": "Batch 4",
+      "Truck": 42,
+      "Van": 42,
+      "Car": 47,
+      "Proclainer": 12
+    },
+    {
+      "name": "Batch 5",
+      "Truck": 42,
+      "Van": 42,
+      "Car": 54,
+      "Proclainer": 12
+    },
+    {
+      "name": "Batch 6",
+      "Truck": 54,
+      "Van": 42,
+      "Car": 66,
+      "Proclainer": 12
+    },
+    {
+      "name": "Batch 7",
+      "Truck": 81,
+      "Van": 69,
+      "Car": 93,
+      "Proclainer": 12
+    }
+  ],
+  "lineData": [
+    {
+      "name": "Observation 1",
+      "Detections": 21,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 2",
+      "Detections": 5,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 3",
+      "Detections": 12,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 4",
+      "Detections": 9,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 5",
+      "Detections": 7,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 6",
+      "Detections": 12,
+      "Confidence": 95
+    },
+    {
+      "name": "Observation 7",
+      "Detections": 27,
+      "Confidence": 95
+    }
+  ],
+  "gallery": [
+    {
+      "id": 101,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682154/tgjrqkljzaerzc1tzlau.jpg",
+      "species": "Truck, Van, Car",
+      "count": 21
+    },
+    {
+      "id": 102,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682154/yetfarh6ajkbygxpuhwj.jpg",
+      "species": "Car",
+      "count": 5
+    },
+    {
+      "id": 103,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682155/lu3voagzmilqevx4twyc.jpg",
+      "species": "Proclainer, Truck, Van, Car",
+      "count": 12
+    },
+    {
+      "id": 104,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682156/rf8wbmpspgnoscszzktl.jpg",
+      "species": "Truck, Van, Car",
+      "count": 9
+    },
+    {
+      "id": 105,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682157/efmlontg8m3mwbdwg6q3.jpg",
+      "species": "Car",
+      "count": 7
+    },
+    {
+      "id": 106,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682158/plwhqwwsp4cqsxchovdq.jpg",
+      "species": "Truck, Car",
+      "count": 12
+    },
+    {
+      "id": 107,
+      "url": "https://res.cloudinary.com/dateiqugp/image/upload/v1769682158/qvfkjfptsf5cg7ngbqil.jpg",
+      "species": "Truck, Van, Car",
+      "count": 27
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "projects": [
+    {
+      "id": "PRJ_001",
+      "name": "Counting_of_animals",
+      "industryId": "F&E06",
+      "clientId": "Jim Corbett National Park",
+      "location": "Uttarakhand",
+      "img": "https://res.cloudinary.com/dateiqugp/image/upload/v1769685103/Untitled_design_3.jpg_eewf0x.jpg",
+      "date": "2024-01-01"
+    },
+    {
+      "id": "PRJ_002",
+      "name": "Mining_Vehicles",
+      "industryId": "M&C03",
+      "clientId": "Google Cloud",
+      "location": "Pune",
+      "img": "https://res.cloudinary.com/dateiqugp/image/upload/v1769152612/Mining_vehicles_1.jpg_ktvedu.jpg",
+      "date": "2023-12-15"
+    },
+    {
+      "id": "PRJ_003",
+      "name": "vehicle_Detection",
+      "industryId": "SCM01",
+      "clientId": "Google Cloud",
+      "location": "Bangalore",
+      "img": "https://res.cloudinary.com/dateiqugp/image/upload/v1769152612/Vehicle_Count_1.jpg_ztf39u.jpg",
+      "date": "2024-01-04"
+    }
+  ]
+}
