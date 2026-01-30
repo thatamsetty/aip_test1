@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 6
+names: ['Deer', 'Zebra', 'elephant', 'giraffe', 'lion', 'lioness']
+
+roboflow:
+  workspace: windturbineproject
+  project: counting-of-animals
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/windturbineproject/counting-of-animals/dataset/1

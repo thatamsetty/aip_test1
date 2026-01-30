@@ -1,5 +1,4 @@
 import os
-import cv2
 import yaml
 import json
 import natsort
@@ -10,9 +9,11 @@ from datetime import date
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException
+
 from auth.auth_routes import router as auth_router
 from auth.otp_service import send_download_link_email, send_rejection_email
-from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException
+
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -136,6 +137,7 @@ def update_analytics_data(final_data: dict, project_id: str):
 
 ##pipeline_logic
 def run_pipeline(project_id: str, train_path: str):
+    import cv2  # Local import to avoid global dependency if not needed
     global PROJECTS_STATUS
     PROJECTS_STATUS[project_id] = {"running": True, "completed": False, "result": None}
 
