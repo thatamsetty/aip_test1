@@ -1,8 +1,8 @@
 fastapi
-uvicorn[standard]
+uvicorn
 opencv-python-headless
-pydantic
-python-multipart
 cloudinary
-PyYAML
+pydantic
+pyyaml
 natsort
+requests
