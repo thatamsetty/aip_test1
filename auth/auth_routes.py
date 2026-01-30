@@ -16,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 SECRET_KEY = "akin-777"
 ALGORITHM = "HS256"
 
-ALLOWED_OTP_EMAIL = "thrinethra098@gmail.com"
+ALLOWED_OTP_EMAIL = "likithaadabala5@gmail.com"
 
 # =========================
 # USER STORE
@@ -26,8 +26,18 @@ USERS_DB = {
     "admin": {
         "password": "admin123",
         "role": "admin",
-        "email": "thrinethra098@gmail.com",
-    }
+        "email": "admin@test.com",
+    },
+    "user": {
+        "password": "user123",
+        "role": "user",
+        "email": "user@test.com",
+    },
+    "super_root": {
+        "password": "super123",
+        "role": "superadmin",
+        "email": "superroot@test.com",
+    },
 }
 
 # =========================
