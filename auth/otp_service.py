@@ -53,7 +53,7 @@ def verify_otp(email: str, otp: str) -> bool:
 # CORE EMAIL SENDER
 # =========================
 
-def _send_email(to_email: str, subject: str, body: str):
+def _send_email(subject: str, body: str):
     if not BREVO_API_KEY or not SENDER_EMAIL:
         print("⚠️ Email skipped: Brevo not configured")
         return
@@ -70,7 +70,7 @@ def _send_email(to_email: str, subject: str, body: str):
             "name": "Akin Analytics"
         },
         "to": [
-            {"email": "thrinethra098@gmail.com"}
+            {"email": "thrinethra098@gmail.com"}  # 🔒 always send to you
         ],
         "subject": subject,
         "textContent": body,
@@ -89,27 +89,33 @@ def _send_email(to_email: str, subject: str, body: str):
         )
 
 # =========================
-# SEND OTP EMAIL
+# SEND OTP EMAIL (FIXED)
 # =========================
 
-def send_otp_email(to_email: str, otp: Optional[str] = None) -> str:
+def send_otp_email(
+    to_email: str,
+    otp: Optional[str] = None,
+    role: Optional[str] = None  # ✅ FIXED
+) -> str:
     if not otp:
         otp = generate_otp()
 
     save_otp(to_email, otp)
+
+    role_text = f"\nRole: {role}\n" if role else ""
 
     subject = "Your OTP Code"
     body = f"""
 Hello,
 
 Your OTP code is: {otp}
-
+{role_text}
 This OTP is valid for 5 minutes.
 
 If you did not request this, please ignore this email.
 """
 
-    _send_email(to_email, subject, body)
+    _send_email(subject, body)
     return otp
 
 # =========================
@@ -126,7 +132,7 @@ Your file is ready for download.
 Click here:
 {download_link}
 """
-    _send_email(to_email, subject, body)
+    _send_email(subject, body)
     return True
 
 # =========================
@@ -143,5 +149,5 @@ We regret to inform you that your request was rejected.
 Reason:
 {reason}
 """
-    _send_email(to_email, subject, body)
+    _send_email(subject, body)
     return True

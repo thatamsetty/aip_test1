@@ -5,75 +5,109 @@ import jwt
 # Internal imports
 from .auth_models import LoginRequest, OTPVerifyRequest
 from .otp_service import (
-    generate_otp, save_otp, verify_otp, 
-    send_otp_email, OTP_STORE
+    generate_otp,
+    save_otp,
+    verify_otp,
+    send_otp_email,
+    OTP_STORE
 )
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
-SECRET_KEY = "akin-777"
 
-# 12-USER STORE (In-memory database simulation)
+SECRET_KEY = "akin-777"
+ALGORITHM = "HS256"
+
+# =========================
+# USER STORE (IN-MEMORY)
+# =========================
+
 USERS_DB = {
     "super_root": {"password": "super123", "role": "superadmin"},
-    "admin":      {"password": "admin123", "role": "admin"},
+    "admin": {"password": "admin123", "role": "admin"},
     **{f"user_{i:02d}": {"password": "user123", "role": "user"} for i in range(1, 11)}
 }
+
+# =========================
+# LOGIN → SEND OTP
+# =========================
 
 @router.post("/login")
 def login(data: LoginRequest):
     user = USERS_DB.get(data.username)
-    
-    # 1. Validate Credentials
-    if not user or user["role"] != data.required_role or user["password"] != data.password:
+
+    if (
+        not user
+        or user["password"] != data.password
+        or user["role"] != data.required_role
+    ):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, 
-            detail="Invalid username, password, or role selection."
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username, password, or role"
         )
-    
-    # 2. Generate and Send OTP
+
     otp = generate_otp()
     save_otp(data.username, otp)
-    send_otp_email(otp=otp, role=user["role"])
-    
-    return {"message": "Verification code has been sent to your registered email."}
+
+    # ✅ FIXED: pass to_email correctly
+    send_otp_email(
+        to_email=data.username,
+        otp=otp,
+        role=user["role"]
+    )
+
+    return {"message": "OTP sent successfully"}
+
+# =========================
+# VERIFY OTP
+# =========================
 
 @router.post("/verify-otp")
 def verify(data: OTPVerifyRequest):
-    success, message = verify_otp(data.username, data.otp)
-    if not success:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
-    
-    return {"status": "success", "message": "Identity verified. You may now proceed to get your token."}
+    is_valid = verify_otp(data.username, data.otp)
+
+    if not is_valid:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired OTP"
+        )
+
+    # ✅ mark OTP as verified
+    OTP_STORE[data.username]["verified"] = True
+
+    return {
+        "status": "success",
+        "message": "OTP verified successfully"
+    }
+
+# =========================
+# ISSUE TOKEN
+# =========================
 
 @router.get("/success")
 def get_success(username: str):
     record = OTP_STORE.get(username)
-    
-    # Check if OTP was actually verified in the previous step
+
     if not record or not record.get("verified"):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, 
-            detail="OTP verification required before token issuance."
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="OTP verification required"
         )
 
     user = USERS_DB.get(username)
-    
-    # Create JWT Payload
+
     payload = {
         "sub": username,
-        "r": user["role"],
+        "role": user["role"],
         "exp": datetime.utcnow() + timedelta(minutes=5)
     }
-    
-    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-    
-    # Clean up the OTP store after successful login
-    if username in OTP_STORE:
-        del OTP_STORE[username]
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+    # cleanup OTP
+    OTP_STORE.pop(username, None)
 
     return {
         "status": "success",
         "access_token": token,
-        "role": user["role"],              
+        "role": user["role"]
     }
-
