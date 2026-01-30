@@ -2,14 +2,25 @@ import os
 import random
 import requests
 from typing import Optional
+from datetime import datetime, timedelta
 
 # =========================
-# CONFIG
+# CONFIG (SAFE)
 # =========================
 
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 
+BREVO_URL = "https://api.brevo.com/v3/smtp/email"
+
+if not BREVO_API_KEY or not SENDER_EMAIL:
+    print("⚠️ WARNING: Brevo email variables not set")
+
+# =========================
+# IN-MEMORY OTP STORE
+# =========================
+
+_OTP_STORE = {}
 
 # =========================
 # OTP GENERATOR
@@ -19,10 +30,33 @@ def generate_otp() -> str:
     return str(random.randint(100000, 999999))
 
 # =========================
-# CORE SEND EMAIL (BREVO API)
+# OTP STORAGE
+# =========================
+
+def save_otp(email: str, otp: str, ttl_minutes: int = 5):
+    _OTP_STORE[email] = {
+        "otp": otp,
+        "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes)
+    }
+
+def verify_otp(email: str, otp: str) -> bool:
+    data = _OTP_STORE.get(email)
+    if not data:
+        return False
+
+    if datetime.utcnow() > data["expires_at"]:
+        return False
+
+    return data["otp"] == otp
+
+# =========================
+# CORE EMAIL SENDER
 # =========================
 
 def _send_email(to_email: str, subject: str, body: str):
+    if not BREVO_API_KEY or not SENDER_EMAIL:
+        raise Exception("Brevo email is not configured")
+
     headers = {
         "accept": "application/json",
         "api-key": BREVO_API_KEY,
@@ -35,7 +69,7 @@ def _send_email(to_email: str, subject: str, body: str):
             "name": "Akin Analytics"
         },
         "to": [
-            {"email": likithaadabala5@gmail.com}
+            {"email": thrinethra098@gmail.com}
         ],
         "subject": subject,
         "textContent": body,
@@ -50,7 +84,7 @@ def _send_email(to_email: str, subject: str, body: str):
 
     if response.status_code not in (200, 201, 202):
         raise Exception(
-            f"❌ Brevo API Error: {response.status_code} {response.text}"
+            f"Brevo API Error: {response.status_code} {response.text}"
         )
 
 # =========================
@@ -60,6 +94,8 @@ def _send_email(to_email: str, subject: str, body: str):
 def send_otp_email(to_email: str, otp: Optional[str] = None) -> str:
     if not otp:
         otp = generate_otp()
+
+    save_otp(to_email, otp)
 
     subject = "Your OTP Code"
     body = f"""
@@ -86,10 +122,8 @@ Hello,
 
 Your file is ready for download.
 
-Click here to download:
+Click here:
 {download_link}
-
-Thank you.
 """
     _send_email(to_email, subject, body)
     return True
@@ -98,10 +132,7 @@ Thank you.
 # SEND REJECTION EMAIL
 # =========================
 
-def send_rejection_email(
-    to_email: str,
-    reason: str = "Your request was rejected"
-) -> bool:
+def send_rejection_email(to_email: str, reason: str) -> bool:
     subject = "Request Rejected"
     body = f"""
 Hello,
@@ -110,8 +141,6 @@ We regret to inform you that your request was rejected.
 
 Reason:
 {reason}
-
-Please contact support if you think this is a mistake.
 """
     _send_email(to_email, subject, body)
     return True
