@@ -11,7 +11,7 @@ SECRET_KEY = "akin-777"
 ALGORITHM = "HS256"
 
 # ✅ FIXED OTP RECEIVER EMAIL
-OTP_RECEIVER_EMAIL = "likithaadabala@gmail.com"
+OTP_RECEIVER_EMAIL = "likithaadabala5@gmail.com"
 
 # =========================
 # USERS DATABASE
