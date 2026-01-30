@@ -19,7 +19,7 @@ ALLOWED_OTP_EMAIL = "thrinethra098@gmail.com"
 # OTP STORE (KEY = username)
 # =========================
 
-OTP_STORE = {}
+OTP_STORE: dict[str, dict] = {}
 
 # =========================
 # OTP GENERATOR
@@ -36,7 +36,7 @@ def save_otp(username: str, otp: str, ttl_minutes: int = 5):
     OTP_STORE[username] = {
         "otp": otp,
         "expires_at": datetime.utcnow() + timedelta(minutes=ttl_minutes),
-        "verified": False
+        "verified": False,
     }
 
 # =========================
@@ -90,7 +90,7 @@ def _send_email(to_email: str, subject: str, body: str):
 # SEND OTP EMAIL
 # =========================
 
-def send_otp_email(to_email: str, otp: Optional[str] = None):
+def send_otp_email(to_email: str, otp: str):
     if to_email != ALLOWED_OTP_EMAIL:
         raise Exception("OTP email not authorized")
 

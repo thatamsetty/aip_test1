@@ -26,7 +26,7 @@ USERS_DB = {
     "admin": {
         "password": "admin123",
         "role": "admin",
-        "email": "thrinethra098@gmail.com"
+        "email": "thrinethra098@gmail.com",
     }
 }
 
@@ -56,14 +56,11 @@ def login(data: LoginRequest):
 
     otp = generate_otp()
 
-    # ✅ STORE OTP USING USERNAME
+    # ✅ STORE OTP BY USERNAME
     save_otp(data.username, otp)
 
-    # ✅ SEND OTP ONLY TO FIXED EMAIL
-    send_otp_email(
-        to_email=ALLOWED_OTP_EMAIL,
-        otp=otp
-    )
+    # ✅ SEND OTP TO FIXED EMAIL
+    send_otp_email(ALLOWED_OTP_EMAIL, otp)
 
     return {"message": "OTP sent successfully"}
 
@@ -99,16 +96,15 @@ def get_success(username: str):
     payload = {
         "sub": username,
         "role": user["role"],
-        "exp": datetime.utcnow() + timedelta(minutes=5)
+        "exp": datetime.utcnow() + timedelta(minutes=5),
     }
 
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-    # cleanup
     OTP_STORE.pop(username, None)
 
     return {
         "status": "success",
         "access_token": token,
-        "role": user["role"]
+        "role": user["role"],
     }
