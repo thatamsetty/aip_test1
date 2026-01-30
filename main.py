@@ -24,6 +24,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = FastAPI(title="AIP-API's")
 app.include_router(auth_router)
 
+from fastapi.responses import RedirectResponse
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
+
+
 ##cors_config
 app.add_middleware(
     CORSMiddleware,
