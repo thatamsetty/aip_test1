@@ -9,7 +9,7 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 # =========================
-# OTP STORE
+# OTP STORE (in-memory)
 # =========================
 
 OTP_STORE = {}
@@ -20,6 +20,7 @@ OTP_STORE = {}
 
 def generate_otp() -> str:
     return str(random.randint(100000, 999999))
+
 
 # =========================
 # SAVE OTP
@@ -32,11 +33,12 @@ def save_otp(username: str, otp: str, ttl_minutes: int = 5):
         "verified": False,
     }
 
+
 # =========================
 # VERIFY OTP
 # =========================
 
-def verify_otp(username: str, otp) -> Tuple[bool, str]:
+def verify_otp(username: str, otp: str) -> Tuple[bool, str]:
     record = OTP_STORE.get(username)
 
     if not record:
@@ -52,26 +54,25 @@ def verify_otp(username: str, otp) -> Tuple[bool, str]:
     record["verified"] = True
     return True, "OTP verified successfully"
 
+
 # =========================
-# SEND OTP EMAIL
+# GENERIC EMAIL SENDER (Brevo)
 # =========================
 
-def send_otp_email(to_email: str, otp: str):
+def _send_email(to_email: str, subject: str, body: str) -> bool:
+    """
+    Central reusable email sender for Brevo.
+    """
+
     if not BREVO_API_KEY or not SENDER_EMAIL:
         print("⚠️ Brevo email not configured")
-        return
+        return False
 
     payload = {
         "sender": {"email": SENDER_EMAIL, "name": "Akin Analytics"},
         "to": [{"email": to_email}],
-        "subject": "Your OTP Code",
-        "textContent": f"""
-Hello,
-
-Your OTP code is: {otp}
-
-This OTP is valid for 5 minutes.
-""",
+        "subject": subject,
+        "textContent": body,
     }
 
     headers = {
@@ -80,4 +81,80 @@ This OTP is valid for 5 minutes.
         "content-type": "application/json",
     }
 
-    requests.post(BREVO_URL, json=payload, headers=headers, timeout=30)
+    try:
+        response = requests.post(
+            BREVO_URL,
+            json=payload,
+            headers=headers,
+            timeout=30
+        )
+        response.raise_for_status()
+        return True
+
+    except requests.RequestException as e:
+        print(f"❌ Email send failed: {e}")
+        return False
+
+
+# =========================
+# SEND OTP EMAIL
+# =========================
+
+def send_otp_email(to_email: str, otp: str) -> bool:
+    subject = "Your OTP Code"
+
+    body = f"""
+Hello,
+
+Your OTP code is: {otp}
+
+This OTP is valid for 5 minutes.
+
+Akin Analytics
+"""
+
+    return _send_email(to_email, subject, body)
+
+
+# =========================
+# SEND DOWNLOAD LINK EMAIL
+# =========================
+
+def send_download_link_email(to_email: str, download_link: str) -> bool:
+    subject = "Your Download Link Is Ready"
+
+    body = f"""
+Hello,
+
+Your file is ready for download.
+
+Click the link below:
+{download_link}
+
+Thank you for using Akin Analytics.
+"""
+
+    return _send_email(to_email, subject, body)
+
+
+# =========================
+# SEND REJECTION EMAIL
+# =========================
+
+def send_rejection_email(to_email: str, reason: str = "Your request was rejected") -> bool:
+    subject = "Request Rejected"
+
+    body = f"""
+Hello,
+
+We regret to inform you that your request was rejected.
+
+Reason:
+{reason}
+
+If you believe this is an error, please contact support.
+
+Akin Analytics
+"""
+
+    return _send_email(to_email, subject, body)
