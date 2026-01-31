@@ -120,41 +120,53 @@ Akin Analytics
 # SEND DOWNLOAD LINK EMAIL
 # =========================
 
-def send_download_link_email(to_email: str, download_link: str) -> bool:
-    subject = "Your Download Link Is Ready"
+def send_download_link_email(download_link: str):
+    """Sends download link with exact format from the provided image."""
 
-    body = f"""
-Hello,
+    subject = "Your File is Ready for Download"
 
-Your file is ready for download.
+    message = f"""Hello,
 
-Click the link below:
+Your file has been uploaded successfully.
+
+You can download it using the link below:
 {download_link}
 
-Thank you for using Akin Analytics.
-"""
+Please download your dataset using the above link & start annotation process.
 
-    return _send_email(to_email, subject, body)
+Regards,
+Akin Analytics-Tech Team"""
 
+    return _send_email(
+        MailConfig.DOWNLOAD_RECEIVER_EMAIL,
+        subject,
+        message
+    )
 
 # =========================
 # SEND REJECTION EMAIL
 # =========================
 
-def send_rejection_email(to_email: str, reason: str = "Your request was rejected") -> bool:
-    subject = "Request Rejected"
+def send_rejection_email(image_id: str, image_url: str):
+    """Sends rejection notification using Akin Analytics branding."""
 
-    body = f"""
-Hello,
+    subject = f"Action Required: Image Rejection (ID: {image_id})"
 
-We regret to inform you that your request was rejected.
+    message = f"""Hello,
 
-Reason:
-{reason}
+An image has been rejected during the review process.
 
-If you believe this is an error, please contact support.
+Details:
+- Image ID: {image_id}
+- Image URL: {image_url}
 
-Akin Analytics
-"""
+Please review the image and do annotations again.
 
-    return _send_email(to_email, subject, body)
+Regards,
+Akin Analytics-Tech Team"""
+
+    return _send_email(
+        MailConfig.DOWNLOAD_RECEIVER_EMAIL,
+        subject,
+        message
+    )
